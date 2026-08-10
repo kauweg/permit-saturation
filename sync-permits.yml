@@ -1,0 +1,22 @@
+name: Sync permit data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "35 13 * * *"
+
+jobs:
+  seattle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: npm run sync:seattle
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+          SEATTLE_MAX_ROWS: "50000"
